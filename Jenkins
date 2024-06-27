@@ -48,6 +48,7 @@ pipeline {
                 echo 'Build Completed'
             }
         }
+        
         stage('Docker Build Stage') {
             steps {
                 script{
@@ -59,13 +60,21 @@ pipeline {
                 }
             }
         }
+        stage('Trivy Scan') {
+            steps {
+                sh 'trivy image vicky275/ekart-project:latest'
+                echo 'Trivy scan Completed'
+            }
+        }
         stage('Docker Deployment Stage') {
-            agent{label 'Testnode'}
+            //label can be used only if we use Node setup in jenkins
+            //agent{label 'Testnode'}
             steps {
                 script{
                     withDockerRegistry(credentialsId: 'Docker', toolName: 'Docker') {
                     //sh 'docker build -t vicky275/ekart-project -f docker/Dockerfile .'// some block
-                    sh 'sudo docker run -d --name=ekart-project -p 8070:8070 vicky275/ekart-project'
+                    //sh 'sudo docker run -d --name=ekart-project -p 8070:8070 vicky275/ekart-project'
+                    sshPublisher(publishers: [sshPublisherDesc(configName: 'Jenkins-slave', transfers: [sshTransfer(cleanRemote: false, excludes: '', execCommand: 'sudo docker run -d --name=ekart-project -p 8070:8070 vicky275/ekart-project', execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: '', remoteDirectorySDF: false, removePrefix: '', sourceFiles: '')], usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: false)])
                     }
                 //sh 'mvn clean package -DskipTests=true'
                 echo 'Docker Deployment Completed'

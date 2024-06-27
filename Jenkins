@@ -11,7 +11,7 @@ pipeline {
     stages {
         stage('Checkout Stage') {
             steps {
-                checkout changelog: false, poll: false, scm: scmGit(branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/jaiswaladi246/Ekart.git']])
+                checkout changelog: false, poll: false, scm: scmGit(branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/devopsvick/dev-project1.git']])
                 echo 'Checkout Completed'
             }
         }

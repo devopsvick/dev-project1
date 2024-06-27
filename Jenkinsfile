@@ -33,9 +33,9 @@ pipeline {
                 withSonarQubeEnv('Jenkins-sonar') {  // Ensure this matches the name of the SonarQube server configured in Jenkins
                     sh ''' 
                         $SCANNER_HOME/bin/sonar-scanner \
-                        -Dsonar.projectName=Devops-Jenkins \
+                        -Dsonar.projectName=Devops-Jenkins-development \
                         -Dsonar.java.binaries=. \
-                        -Dsonar.projectKey=Devops-Jenkins \
+                        -Dsonar.projectKey=Devops-Jenkins-development \
                         -Dsonar.sources=.
                     '''
                     echo 'Sonar Scan Completed'
